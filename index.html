@@ -34,6 +34,7 @@
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
+            min-height: 100vh;
         }
 
         .noise {
@@ -59,7 +60,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 2rem 0;
+            padding: 1.5rem 0;
             position: fixed;
             top: 0;
             left: 0;
@@ -67,10 +68,11 @@
             z-index: 1000;
             background: rgba(10, 6, 6, 0.8);
             backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
         }
 
         .logo {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
             background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
@@ -91,6 +93,7 @@
             font-weight: 500;
             position: relative;
             padding: 0.5rem 0;
+            transition: color 0.3s ease;
         }
 
         .nav-links a::after {
@@ -108,11 +111,20 @@
             width: 100%;
         }
 
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
         .hero {
             min-height: 100vh;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 4rem;
+            gap: 2rem;
             align-items: center;
             padding: 8rem 0 4rem;
         }
@@ -122,7 +134,7 @@
         }
 
         .hero-content h1 {
-            font-size: 4rem;
+            font-size: clamp(2.5rem, 5vw, 4rem);
             line-height: 1.2;
             margin-bottom: 1.5rem;
             background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
@@ -132,7 +144,7 @@
 
         .hero-content p {
             color: var(--text-muted);
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 2vw, 1.2rem);
             margin-bottom: 2rem;
         }
 
@@ -145,6 +157,12 @@
             position: relative;
             overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            z-index: 2;
+        }
+
+        .glass-card > * {
+            position: relative;
+            z-index: 3;
         }
 
         .glass-card:hover {
@@ -161,6 +179,7 @@
             height: 200%;
             background: radial-gradient(circle, var(--glass) 0%, transparent 70%);
             animation: rotate 20s linear infinite;
+            z-index: 1;
         }
 
         .btn {
@@ -174,6 +193,9 @@
             overflow: hidden;
             background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
             color: var(--text);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .btn::before {
@@ -198,17 +220,17 @@
 
         .services-grid, .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
             gap: 2rem;
             margin: 4rem 0;
         }
 
         .section {
-            padding: 6rem 0;
+            padding: 4rem 0;
         }
 
         .section-title {
-            font-size: 2.5rem;
+            font-size: clamp(2rem, 5vw, 2.5rem);
             text-align: center;
             margin-bottom: 3rem;
             background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
@@ -218,13 +240,13 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
             gap: 2rem;
             margin: 4rem 0;
         }
 
         .stat-number {
-            font-size: 3.5rem;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
             font-weight: bold;
             background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
@@ -303,6 +325,7 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            max-width: calc(100% - 4rem);
         }
         
         .notification.success {
@@ -330,10 +353,21 @@
             margin-top: 4rem;
         }
 
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
         .social-links a {
             color: var(--text);
             text-decoration: none;
-            margin-left: 1.5rem;
             transition: color 0.3s ease;
         }
 
@@ -357,27 +391,127 @@
             }
         }
 
-        @media (max-width: 768px) {
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background: var(--darker);
+            z-index: 999;
+            transition: right 0.3s ease;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            border-left: 1px solid var(--glass-border);
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .mobile-menu-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .close-menu-btn {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            align-self: flex-end;
+            cursor: pointer;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 998;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        @media (max-width: 992px) {
             .hero {
                 grid-template-columns: 1fr;
                 text-align: center;
                 padding-top: 6rem;
+                gap: 3rem;
             }
 
-            .hero-content h1 {
-                font-size: 2.5rem;
+            .hero-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
             }
 
             .nav-links {
                 display: none;
             }
 
+            .mobile-menu-btn {
+                display: block;
+            }
+
             .container {
-                padding: 0 1rem;
+                padding: 0 1.5rem;
             }
 
             .form-grid {
                 grid-template-columns: 1fr;
+            }
+
+            footer .footer-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero {
+                padding-top: 5rem;
+            }
+
+            .section {
+                padding: 3rem 0;
+            }
+
+            .glass-card {
+                padding: 1.5rem;
+            }
+
+            .contact-form {
+                padding: 1.5rem;
+            }
+
+            .btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -396,19 +530,39 @@
                 <a href="#projects">Projects</a>
                 <a href="#contact">Contact</a>
             </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
         </div>
     </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="close-menu-btn" id="closeMenuBtn">×</button>
+        <div class="mobile-menu-links">
+            <a href="#about" class="mobile-nav-link">About</a>
+            <a href="#services" class="mobile-nav-link">Services</a>
+            <a href="#projects" class="mobile-nav-link">Projects</a>
+            <a href="#contact" class="mobile-nav-link">Contact</a>
+        </div>
+    </div>
+    <div class="overlay" id="overlay"></div>
 
     <div class="container">
         <section class="hero">
             <div class="hero-content">
                 <h1>The Future of AI Robotics</h1>
                 <p>Pioneering the next generation of autonomous machines with advanced AI-powered digital brains.</p>
-                <button class="btn">Join the Revolution →</button>
+                <button class="btn">Join the Revolution <span>→</span></button>
             </div>
             <div class="glass-card">
                 <h2>Our Vision</h2>
                 <p>Creating intelligent, adaptable, and autonomous robotic systems that revolutionize industries and enhance human capabilities.</p>
+            </div>
+        </section>
+
+        <section id="about" class="section">
+            <h2 class="section-title">About Cybreon</h2>
+            <div class="glass-card">
+                <p>Cybreon is at the forefront of robotics and artificial intelligence, developing cutting-edge solutions that bridge the gap between human potential and machine capability. Our team of experts combines decades of experience in AI, robotics, and cognitive systems to create truly intelligent machines.</p>
             </div>
         </section>
 
@@ -499,18 +653,18 @@
                             <option value="feature">Feature Request</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn">Send Message →</button>
+                    <button type="submit" class="btn">Send Message <span>→</span></button>
                 </form>
             </div>
         </section>
 
         <footer>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="footer-content">
                 <p>© 2025 Cybreon. All rights reserved.</p>
                 <div class="social-links">
-                    <a href="#">GitHub</a>
-                    <a href="#">Twitter</a>
-                    <a href="#">LinkedIn</a>
+                    <a href="#" aria-label="GitHub">GitHub</a>
+                    <a href="#" aria-label="Twitter">Twitter</a>
+                    <a href="#" aria-label="LinkedIn">LinkedIn</a>
                 </div>
             </div>
         </footer>
@@ -523,13 +677,50 @@
     </div>
 
     <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const overlay = document.getElementById('overlay');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        overlay.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
         // Smooth Scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href'))?.scrollIntoView({
-                    behavior: 'smooth'
-                });
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
             });
         });
 
@@ -597,6 +788,11 @@
         contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.innerHTML = 'Sending...';
+            submitBtn.disabled = true;
+            
             try {
                 const response = await fetch(contactForm.action, {
                     method: 'POST',
@@ -606,18 +802,63 @@
                     }
                 });
 
-                const data = await response.json();
-
                 if (response.ok) {
                     showNotification('Thank you for your message! We will get back to you soon.', true);
                     contactForm.reset();
                 } else {
-                    throw new Error(data.error || 'Failed to send message. Please try again later.');
+                    throw new Error('Failed to send message. Please try again later.');
                 }
             } catch (error) {
                 showNotification(error.message, false);
+            } finally {
+                submitBtn.innerHTML = originalBtnText;
+                submitBtn.disabled = false;
             }
         });
+
+        // Dynamic background elements
+        function createFloatingElements() {
+            const colors = ['rgba(255, 51, 102, 0.1)', 'rgba(255, 107, 107, 0.1)', 'rgba(255, 133, 133, 0.1)'];
+            
+            for (let i = 0; i < 15; i++) {
+                const element = document.createElement('div');
+                element.style.position = 'fixed';
+                element.style.width = Math.random() * 100 + 50 + 'px';
+                element.style.height = Math.random() * 100 + 50 + 'px';
+                element.style.background = colors[Math.floor(Math.random() * colors.length)];
+                element.style.borderRadius = '50%';
+                element.style.filter = 'blur(20px)';
+                element.style.opacity = '0.3';
+                element.style.zIndex = '0';
+                element.style.top = Math.random() * 100 + 'vh';
+                element.style.left = Math.random() * 100 + 'vw';
+                
+                const animationDuration = Math.random() * 30 + 20 + 's';
+                element.style.animation = `float ${animationDuration} infinite alternate ease-in-out`;
+                
+                document.body.appendChild(element);
+            }
+        }
+
+        // Initialize floating elements
+        createFloatingElements();
+
+        // Add keyframes dynamically
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes float {
+                0% {
+                    transform: translate(0, 0) rotate(0deg);
+                }
+                50% {
+                    transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(${Math.random() * 360}deg);
+                }
+                100% {
+                    transform: translate(0, 0) rotate(0deg);
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
