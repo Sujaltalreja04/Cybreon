@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cybreon - Next-Gen Robotics AI</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --primary: #ff3366;
+            --primary-dark: #e61e50;
+            --secondary: #ff6b6b;
+            --accent: #ff8585;
+            --dark: #1a0f0f;
+            --darker: #0a0606;
+            --glass: rgba(255, 51, 102, 0.1);
+            --glass-border: rgba(255, 51, 102, 0.2);
+            --text: #fff5f7;
+            --text-muted: #ffa5b5;
+            --error: #ff1a1a;
+            --success: #00cc88;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.05"/></svg>');
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 6, 6, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            padding: 8rem 0 4rem;
+        }
+
+        .hero-content {
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content p {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 51, 102, 0.2);
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--glass) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--text);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(255, 51, 102, 0.4);
+        }
+
+        .services-grid, .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .section {
+            padding: 6rem 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Improved Contact Form Styles */
+        .contact-section {
+            padding: 4rem 0;
+        }
+        
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: rgba(10, 6, 6, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 51, 102, 0.2);
+        }
+        
+        textarea.form-input {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        /* Notification Toast */
+        .notification {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .notification.success {
+            background: var(--success);
+            box-shadow: 0 5px 15px rgba(0, 204, 136, 0.3);
+        }
+        
+        .notification.error {
+            background: var(--error);
+            box-shadow: 0 5px 15px rgba(255, 26, 26, 0.3);
+        }
+        
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .notification-icon {
+            font-size: 1.2rem;
+        }
+
+        footer {
+            border-top: 1px solid var(--glass-border);
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+
+        .social-links a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding-top: 6rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    
+    <nav>
+        <div class="container">
+            <div class="logo">
+                <span>⚡</span> Cybreon
+            </div>
+            <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#projects">Projects</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>The Future of AI Robotics</h1>
+                <p>Pioneering the next generation of autonomous machines with advanced AI-powered digital brains.</p>
+                <button class="btn">Join the Revolution →</button>
+            </div>
+            <div class="glass-card">
+                <h2>Our Vision</h2>
+                <p>Creating intelligent, adaptable, and autonomous robotic systems that revolutionize industries and enhance human capabilities.</p>
+            </div>
+        </section>
+
+        <section id="services" class="section">
+            <h2 class="section-title">What We Do</h2>
+            <div class="services-grid">
+                <div class="glass-card">
+                    <h3>Neural Processing</h3>
+                    <p>Advanced AI systems that enable robots to learn, adapt, and evolve through experience.</p>
+                </div>
+                <div class="glass-card">
+                    <h3>Autonomous Systems</h3>
+                    <p>Self-governing robotic platforms capable of making complex decisions in real-time.</p>
+                </div>
+                <div class="glass-card">
+                    <h3>Sensor Fusion</h3>
+                    <p>Integrated perception systems combining multiple data streams for enhanced awareness.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="section">
+            <h2 class="section-title">Latest Projects</h2>
+            <div class="projects-grid">
+                <div class="glass-card">
+                    <h3>Project Atlas</h3>
+                    <p>Next-gen robotics platform with advanced cognitive capabilities.</p>
+                </div>
+                <div class="glass-card">
+                    <h3>Neural Core</h3>
+                    <p>Distributed AI processing system for robotic swarms.</p>
+                </div>
+                <div class="glass-card">
+                    <h3>Synapse</h3>
+                    <p>Real-time learning and adaptation framework for autonomous systems.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats-grid">
+            <div class="glass-card">
+                <div class="stat-number" data-target="150">0</div>
+                <p>AI Models Deployed</p>
+            </div>
+            <div class="glass-card">
+                <div class="stat-number" data-target="2000">0</div>
+                <p>Robots Powered</p>
+            </div>
+            <div class="glass-card">
+                <div class="stat-number" data-target="99">0</div>
+                <p>Success Rate (%)</p>
+            </div>
+        </section>
+
+        <section id="contact" class="section">
+            <h2 class="section-title">Contact Us</h2>
+            <div class="contact-form">
+                <form id="contactForm" action="https://formspree.io/f/xeoavbbb" method="POST">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" class="form-input" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" class="form-input" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="feedback">Feedback Type</label>
+                        <select id="feedback" name="feedbackType" class="form-input" required>
+                            <option value="">Select Feedback Type</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="partnership">Partnership Opportunity</option>
+                            <option value="support">Technical Support</option>
+                            <option value="feature">Feature Request</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">Send Message →</button>
+                </form>
+            </div>
+        </section>
+
+        <footer>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <p>© 2025 Cybreon. All rights reserved.</p>
+                <div class="social-links">
+                    <a href="#">GitHub</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">LinkedIn</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="notification">
+        <span class="notification-icon">✓</span>
+        <span class="notification-message"></span>
+    </div>
+
+    <script>
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href'))?.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Stats Counter Animation
+        const animateCounter = (element, target) => {
+            let current = 0;
+            const increment = target / 100;
+            const timer = setInterval(() => {
+                current += increment;
+                element.textContent = Math.floor(current);
+                if (current >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                }
+            }, 20);
+        };
+
+        // Intersection Observer for Stats
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = Number(entry.target.getAttribute('data-target'));
+                    animateCounter(entry.target, target);
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.stat-number').forEach(stat => {
+            statsObserver.observe(stat);
+        });
+
+        // Scroll Animation for Cards
+        const cardObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.6s ease-out';
+            cardObserver.observe(card);
+        });
+
+        // Form Handling with Notification
+        const contactForm = document.getElementById('contactForm');
+        const notification = document.getElementById('notification');
+        const notificationMessage = document.querySelector('.notification-message');
+
+        const showNotification = (message, isSuccess) => {
+            notification.className = isSuccess ? 'notification success' : 'notification error';
+            notificationMessage.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        };
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            try {
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: new FormData(contactForm),
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showNotification('Thank you for your message! We will get back to you soon.', true);
+                    contactForm.reset();
+                } else {
+                    throw new Error(data.error || 'Failed to send message. Please try again later.');
+                }
+            } catch (error) {
+                showNotification(error.message, false);
+            }
+        });
+    </script>
+</body>
+</html>
